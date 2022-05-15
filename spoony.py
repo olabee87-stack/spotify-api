@@ -1,8 +1,12 @@
 import requests
 import pandas as pd
+import sqlalchemy
+import sqlite3
 
 from api_keys import spoon_api
-from validation_helper import check_if_valid_data
+from modules.validation_helper import check_if_valid_data
+
+DATABASE_LOCATION = 'sqlite:///pasta_dishes.sqlite'
 
 
 def extract_data():
@@ -34,11 +38,34 @@ def extract_data():
     # Validate
     if check_if_valid_data(pasta_df):
         print('Data works fine, You can load it!')
-        return pasta_df
+        # return pasta_df
 
     # Load data
+    engine = sqlalchemy.create_engine(DATABASE_LOCATION)
+    conn = sqlite3.connect('pasta_dishes.sqlite')
+    cursor = conn.cursor()
 
-    # Schedule jobs
+    sql_query = """
+        CREATE TABLE IF NOT EXISTS pasta_dishes(
+        title VARCHAR(300),
+        nutrition FLOAT(5, 2),
+        pk INTEGER PRIMARY KEY DESC
+        )
+        """
+
+    cursor.execute(sql_query)
+    print('Database successfully mounted')
+
+    try:
+        pasta_df.to_sql('pasta_dishes', engine, index=False, if_exists='append')
+    except:
+        print('Data already exists in the database')
+
+    conn.close()
+    print('Database successfully closed')
+
+
+# Schedule jobs
 
 
 print(extract_data())
