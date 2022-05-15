@@ -56,6 +56,8 @@ def extract_data():
     cursor.execute(sql_query)
     print('Database successfully mounted')
 
+    # Load data from dataframe to database
+
     try:
         pasta_df.to_sql('pasta_dishes', engine, index=False, if_exists='append')
     except:
@@ -63,6 +65,9 @@ def extract_data():
 
     conn.close()
     print('Database successfully closed')
+
+
+
 
 
 # Schedule jobs
