@@ -19,7 +19,7 @@ def extract_data():
     response = requests.get(url2)
     response_data = response.json()
 
-    # create empty list for your data
+    # create empty lists for data
     title = []
     nutrition = []
 
