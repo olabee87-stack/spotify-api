@@ -67,9 +67,6 @@ def extract_data():
     print('Database successfully closed')
 
 
-
-
-
 # Schedule jobs
 
 
